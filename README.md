@@ -10,7 +10,7 @@ This repository contains structured notes from practical security labs, focusing
 - Windows and Linux log interpretation
 - Common attack patterns (phishing, brute force, malware)
 - SOC-style incident scenarios and investigations
-- Detection thinking and response logic
+- Detection thinking and response logic 
 
 ## Goal
 Build practical understanding of how Security Operations Centers detect, analyze, and respond to security incidents.
