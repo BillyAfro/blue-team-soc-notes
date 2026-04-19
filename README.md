@@ -1,5 +1,5 @@
 # Blue Team SOC Notes
-
+ 
 SOC Level 1 hands-on labs, incident analysis, and defensive security scenarios.
 
 ## Overview
