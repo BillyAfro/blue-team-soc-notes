@@ -1,6 +1,6 @@
 # Blue Team SOC Notes
  
-SOC Level 1 hands-on labs, incident analysis, and defensive security scenarios.
+SOC Level 1 hands-on labs, incident analysis, and defensive security scenarios. 
 
 ## Overview
 This repository contains structured notes from practical security labs, focusing on SOC workflows, log analysis, and detection of common attack patterns.
