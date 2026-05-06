@@ -1,0 +1,55 @@
+# Network Subnetting: FLSM vs VLSM Analysis
+
+## 1. Wstęp:
+Poprawny podział sieci na podsieci (Subnetting) to fundament bezpieczeństwa sieciowego. 
+Pozwala na:
+* **Izolację (Segmentation):** Ograniczenie poruszania się napastnika wewnątrz sieci (Lateral Movement).
+* **Optymalizację:** Zmniejszenie domeny rozgłoszeniowej (Broadcast Domain).
+* **Kontrolę:** Precyzyjne filtrowanie ruchu na Firewallach (ACL).
+
+---
+
+## 2. FLSM (Fixed Length Subnet Mask)
+Metoda dzielenia sieci na równe podsieci z identyczną maską. Najprostsza, ale najmniej efektywna pod względem wykorzystania adresów.
+
+### Przykład: Podział /24 na 8 równych części
+* **Baza:** 256 adresów.
+* **Obliczenia:** 256 / 8 = 32 adresy na sieć.
+* **Maska:** 2^5 = 32, więc na hosty zostaje 5 bitów. Nowa maska: **32 - 5 = /27**.
+
+| Podsieć | Zakres IP | Adres Sieci | Broadcast |
+| :--- | :--- | :--- | :--- |
+| 1 | .0 - .31 | .0 | .31 |
+| 2 | .32 - .63 | .32 | .63 |
+| ... | ... | ... | ... |
+| 8 | .224 - .255 | .224 | .255 |
+
+---
+
+## 3. VLSM (Variable Length Subnet Mask)
+Zaawansowana metoda pozwalająca na dobieranie różnych masek dla różnych podsieci, co minimalizuje marnowanie adresów IP.
+
+### Scenariusz Projektowy:
+Dzielimy sieć `192.168.10.0 /24` dla 3 stref o różnych potrzebach:
+1. **Strefa Lab (SL):** 60 hostów
+2. **Strefa Gościnna (SG):** 28 hostów
+3. **Strefa Monitoringu (SM):** 12 hostów
+
+### Logika Projektowa:
+Zawsze zaczynamy od największej grupy (Najniższa możliwa potęga 2 > Zapotrzebowanie + 2).
+
+| Strefa | Potrzeba | Rozmiar (2^n) | Maska | Zakres IP | Pierwszy Host |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **SL** | 60 | 64 (2^6) | **/26** | .0 - .63 | **.1** |
+| **SG** | 28 | 32 (2^5) | **/27** | .64 - .95 | **.65** |
+| **SM** | 12 | 16 (2^4) | **/28** | .96 - .111 | **.97** |
+
+**Status:** Wolne adresy od `.112` do `.255` zarezerwowane pod przyszłą ekspansję.
+
+---
+
+## 4. Wnioski dla Cybersecurity
+Jako SOC Analyst / Pentester, znajomość granic sieci pozwala na:
+* Wykrywanie anomalii (np. host z SG próbuje skanować porty w SL).
+* Wykrywanie ataków typu *Subnet Hijacking*.
+* Poprawną konfigurację systemów IDS/IPS.
