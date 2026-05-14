@@ -1,0 +1,48 @@
+Objective
+Extract hidden or embedded files from a PCAP capture and verify their integrity using cryptographic hashing to ensure a valid Chain of Custody.
+
+Scenario
+During a network traffic analysis, automated export tools failed to identify all transferred assets. An analyst must manually carve out data from specific packets and identify sensitive information (PII) hidden within unencrypted streams.
+
+Technical Workflow
+1. Manual Data Carving (Packet 39765)
+When a file signature (like JPEG/JFIF) is detected but not indexed by Wireshark’s automated export, manual extraction is required.
+
+Action: Locate Packet 39765.
+
+Extraction: In the Packet Details pane, right-click the JPEG File Interim Data -> Export Packet Bytes...
+
+Command:
+
+Bash
+# Verify the integrity of the carved image
+md5sum extracted_image.jpg
+2. Cleartext Intelligence Gathering (HTTP Objects)
+Automated reconstruction of files sent via unencrypted protocols to identify adversary-controlled data or leaked internal notes.
+
+Action: File -> Export Objects -> HTTP.
+
+Process: Identify .txt files (e.g., messages containing alien names/PII).
+
+Command:
+
+Bash
+    # Read the content of the recovered intelligence file
+    cat recovered_note.txt
+    ```
+
+#### **3. Artifact Verification & Anti-Analysis**
+Dealing with "trolls" or hidden metadata in packet comments (e.g., Packet `12`).
+*   **Method:** Check `Frame` -> `Packet Comment` for hidden instructions or file references.
+*   **Integrity Logic:** Apply $H(M)$ where $H$ is MD5. The **Avalanche Effect** ensures that a 1-bit change in the PCAP results in a completely different hash output, proving the evidence hasn't been tampered with.
+
+### **Summary Table**
+
+| Component | Tool / Protocol | Action |
+| :--- | :--- | :--- |
+| **Extraction** | Wireshark / HTTP | `Export Objects` |
+| **Carving** | Wireshark / Raw Bytes | `Export Packet Bytes` (Ctrl+Shift+X) |
+| **Integrity** | CLI / MD5 | `md5sum <filename>` |
+| **Analysis** | CLI / Linux | `cat` / `ls -la` |
+
+---
